@@ -1,15 +1,55 @@
 <template>
-    <div id="app">
-        <router-view></router-view>
+    <div id="app" class="m-hosts">
+        <hosts-header class="header"></hosts-header>
+        <div class="content">
+            <hosts-sidebar class="left-content"></hosts-sidebar>
+            <router-view class="right-content"></router-view>
+        </div>
     </div>
 </template>
 
 <script>
+    import HostsHeader from './components/HostsHeader';
+    import HostsSidebar from './components/HostsSidebar';
+    import { mapActions } from 'vuex';
+
     export default {
-        name: 'electron-hosts'
+        name: 'electron-hosts',
+        components: {
+            'hosts-header': HostsHeader,
+            'hosts-sidebar': HostsSidebar
+        },
+        data() {
+            return {
+                hostGroups: []
+            };
+        },
+        async mounted() {
+            this.initData();
+        },
+        methods: {
+            ...mapActions(['setHostGroupsAction']),
+            initData() {
+                this.setHostGroupsAction();
+            }
+        }
     };
 </script>
 
-<style>
-    /* CSS */
+<style lang="scss" scoped>
+    .m-hosts {
+        box-sizing: border-box;
+        padding-top: 50px;
+        .content {
+            display: flex;
+            flex-flow: row nowrap;
+            height: calc(100vh - 50px);
+            .left-content {
+                width: 200px;
+            }
+            .right-content {
+                flex: 1;
+            }
+        }
+    }
 </style>

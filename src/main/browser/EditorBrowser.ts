@@ -6,10 +6,8 @@ const browserBaseConfig = {
     resizable: true,
     center: true,
     show: true,
-    frame: false,
     autoHideMenuBar: false,
     icon: 'assets/icon.png',
-    alwaysOnTop: true,
     webPreferences: {
         devTools: true
     }

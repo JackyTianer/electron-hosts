@@ -17,8 +17,7 @@ module.exports = {
     ],
     // required to lint *.vue files
     plugins: ['vue'],
-    globals: {
-    },
+    globals: {},
     // add your custom rules here
     rules: {
         // allow async-await
@@ -36,6 +35,7 @@ module.exports = {
             }
         ],
         'space-before-function-paren': 0,
-        'no-new': 'off'
+        'no-new': 'off',
+        'no-callback-literal': 0
     }
 };
