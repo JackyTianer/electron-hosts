@@ -19,7 +19,7 @@
             'hosts-header': HostsHeader,
             'hosts-sidebar': HostsSidebar
         },
-        props: {
+        computed: {
             ...mapState({
                 hostGroups: (state) => state.hostGroups
             })
@@ -30,7 +30,6 @@
         methods: {
             ...mapActions(['setHostGroupsAction']),
             initData() {
-                debugger;
                 this.setHostGroupsAction();
             }
         }

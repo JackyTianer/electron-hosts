@@ -15,11 +15,11 @@
 <style lang="scss" scoped>
     .u-host-header {
         background: #fafafa;
+        border-bottom: 1px solid #dcdfe6;
         left: 0;
         padding: 10px;
         position: fixed;
         top: 0;
         width: 100%;
-
     }
 </style>

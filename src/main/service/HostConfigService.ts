@@ -1,6 +1,7 @@
 import BaseService from './abstract/BaseService';
 import {app} from 'electron';
 import * as path from 'path';
+import util from '../utils/util';
 import {readJsonSync, writeJSONSync, readFileSync, writeFileSync, ensureFileSync} from 'fs-extra';
 
 const packageConfig = require('../../../package.json');
@@ -8,15 +9,15 @@ const packageConfig = require('../../../package.json');
 const initConfig = {
     version: packageConfig.version,
     hostGroups: [{
-        id: +new Date(),
+        id: util.generateId(),
         name: '默认组',
         hosts: [{
-            id: +new Date(),
-            name: '默认',
+            id: util.generateId(),
+            name: '默认host',
             path: path.join(app.getPath('userData'), 'hostFile/defaultHost.txt')
         }, {
-            id: +new Date(),
-            name: '默认',
+            id: util.generateId(),
+            name: '常驻host',
             path: path.join(app.getPath('userData'), 'hostFile/residentHost.txt')
         }]
     }]
@@ -54,9 +55,22 @@ class HostConfigService extends BaseService {
         }
     }
 
-    public getHostGroups(): Array<any> {
-        console.log(1);
+    public getHostGroups(): Array<{ id: number, name: string, hosts: [any] }> {
         return readJsonSync(this.configPath).hostGroups;
+    }
+
+    public getHostContentById(id): string {
+        const groups = this.getHostGroups();
+        for (let g of groups) {
+            for (let h of g.hosts) {
+                if (h.id === id) {
+                    return readFileSync(h.path, {
+                        encoding: 'utf8'
+                    });
+                }
+            }
+        }
+        return '';
     }
 
     public static getInstance(): HostConfigService {
