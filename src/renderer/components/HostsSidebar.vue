@@ -40,7 +40,6 @@
         // },
         methods: {
             goHostContent(id) {
-                debugger;
                 this.$router.replace({
                     name: 'host',
                     params: {

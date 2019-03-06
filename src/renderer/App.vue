@@ -3,7 +3,7 @@
         <hosts-header class="header"></hosts-header>
         <div class="content">
             <hosts-sidebar class="left-content" :host-groups="hostGroups"></hosts-sidebar>
-            <router-view class="right-content"></router-view>
+            <router-view class="right-content" v-if="isSubRouterAlive"></router-view>
         </div>
     </div>
 </template>
@@ -27,11 +27,28 @@
         async mounted() {
             this.initData();
         },
+        provide() {
+            return {
+                refresh: this.refresh
+            };
+        },
+        data() {
+            return {
+                isSubRouterAlive: true
+            };
+        },
         methods: {
             ...mapActions(['setHostGroupsAction']),
             initData() {
                 this.setHostGroupsAction();
+            },
+            refresh() {
+                this.isSubRouterAlive = false;
+                this.$nextTick(() => {
+                    this.isSubRouterAlive = true;
+                });
             }
+
         }
     };
 </script>

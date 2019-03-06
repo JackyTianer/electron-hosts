@@ -59,18 +59,41 @@ class HostConfigService extends BaseService {
         return readJsonSync(this.configPath).hostGroups;
     }
 
-    public getHostContentById(id): string {
+    public getHostConfigById(id): { id: number, name: string, path: string } {
         const groups = this.getHostGroups();
         for (let g of groups) {
             for (let h of g.hosts) {
                 if (h.id === id) {
-                    return readFileSync(h.path, {
-                        encoding: 'utf8'
-                    });
+                    return h;
                 }
             }
         }
+        return null;
+    }
+
+    public getHostContentById(id): string {
+        const config = this.getHostConfigById(id);
+        if (!!config) {
+            const a = readFileSync(config.path, {
+                encoding: 'utf8'
+            });
+            return readFileSync(config.path, {
+                encoding: 'utf8'
+            });
+        }
         return '';
+    }
+
+    public updateHostContentById(id, content): boolean {
+        const config = this.getHostConfigById(id);
+        if (!!config) {
+            writeFileSync(config.path, content, {
+                encoding: 'utf8',
+                flag: 'w+'
+            });
+            return true;
+        }
+        return false;
     }
 
     public static getInstance(): HostConfigService {

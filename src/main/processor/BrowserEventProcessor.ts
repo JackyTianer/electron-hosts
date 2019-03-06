@@ -32,6 +32,10 @@ class BrowserEventProcessor {
     private getHostContentById({id}): string {
         return HostConfigService.getInstance().getHostContentById(id);
     }
+
+    private updateHostContentById({id, content}):boolean {
+        return HostConfigService.getInstance().updateHostContentById(id, content);
+    }
 }
 
 export default BrowserEventProcessor;
