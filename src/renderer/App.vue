@@ -2,7 +2,7 @@
     <div id="app" class="m-hosts">
         <hosts-header class="header"></hosts-header>
         <div class="content">
-            <hosts-sidebar class="left-content"></hosts-sidebar>
+            <hosts-sidebar class="left-content" :host-groups="hostGroups"></hosts-sidebar>
             <router-view class="right-content"></router-view>
         </div>
     </div>
@@ -11,7 +11,7 @@
 <script>
     import HostsHeader from './components/HostsHeader';
     import HostsSidebar from './components/HostsSidebar';
-    import { mapActions } from 'vuex';
+    import { mapActions, mapState } from 'vuex';
 
     export default {
         name: 'electron-hosts',
@@ -19,10 +19,10 @@
             'hosts-header': HostsHeader,
             'hosts-sidebar': HostsSidebar
         },
-        data() {
-            return {
-                hostGroups: []
-            };
+        props: {
+            ...mapState({
+                hostGroups: (state) => state.hostGroups
+            })
         },
         async mounted() {
             this.initData();
@@ -30,6 +30,7 @@
         methods: {
             ...mapActions(['setHostGroupsAction']),
             initData() {
+                debugger;
                 this.setHostGroupsAction();
             }
         }

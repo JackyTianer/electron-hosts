@@ -1,5 +1,5 @@
 export default {
-    setHostsGroup(state, hostGroup) {
+    setHostGroups(state, hostGroup) {
         state.hostGroups = hostGroup;
     }
 };

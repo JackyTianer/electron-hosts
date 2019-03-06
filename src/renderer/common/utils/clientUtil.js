@@ -24,6 +24,7 @@ function call(api, { param } = {}) {
 export default {
     perform(apiName, param) {
         try {
+            debugger;
             return call(apiName, { param });
         } catch (e) {
             console.error(e);
