@@ -3,14 +3,10 @@
         <div v-for="g in hostGroups" :key="g.id">
             <h2 class="group-name">{{g.name}}</h2>
             <ul>
-                <li class="host-name" v-for="h in g.hosts" :key="h.id" @click="goHostContent(h.id)">
-                    <div v-if="!h.edit">
-                        <el-checkbox :checked="isCheck(h.id)" @change="modifyCheckedHostIdList(h.id)"/>
-                        <span class="name">{{h.name}}</span>
-                    </div>
-                    <div v-else>
-                        <el-input :value="h.name" placeholder="" size="mini"></el-input>
-                    </div>
+                <li class="host-name f-cb" v-for="h in g.hosts" :key="h.id" @click="goHostContent(h.id)">
+                    <el-checkbox :checked="isCheck(h.id)" @change="modifyCheckedHostIdList(h.id)"/>
+                    <span class="name">{{h.name}}</span>
+                    <i class="el-icon-delete oper-remove f-fr" @click="removeHost(h.id)"></i>
                 </li>
             </ul>
         </div>
@@ -33,7 +29,7 @@
             }
         },
         methods: {
-            ...mapActions(['modifyCheckedHostIdListAction']),
+            ...mapActions(['modifyCheckedHostIdListAction', 'removeHostByIdAction']),
             goHostContent(id) {
                 this.$router.replace({
                     name: 'host',
@@ -47,6 +43,9 @@
             },
             modifyCheckedHostIdList(id) {
                 this.modifyCheckedHostIdListAction(id);
+            },
+            removeHost(id) {
+                this.removeHostByIdAction(id);
             }
         }
     };
@@ -69,8 +68,20 @@
             .el-checkbox {
                 margin-right: 0;
             }
+            .oper-remove {
+                display: none;
+                cursor: pointer;
+                line-height: 24px;
+                margin-right: 2px;
+                &:hover {
+                    color: #409eff;
+                }
+            }
             &:hover {
                 background: #ebeef5;
+                .oper-remove {
+                    display: inline-block;
+                }
             }
         }
     }

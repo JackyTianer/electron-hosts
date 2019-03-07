@@ -2,7 +2,7 @@ import BaseService from './abstract/BaseService';
 import {app} from 'electron';
 import * as path from 'path';
 import util from '../utils/util';
-import {readJsonSync, writeJSONSync, readFileSync, writeFileSync, ensureFileSync} from 'fs-extra';
+import {readJsonSync, writeJSONSync, readFileSync, writeFileSync, ensureFileSync, removeSync} from 'fs-extra';
 
 const packageConfig = require('../../../package.json');
 const hostDoc = path.join(app.getPath('userData'), 'hostFile/');
@@ -124,6 +124,22 @@ class HostConfigService extends BaseService {
         obj.hostGroups[0].hosts.push(host);
         this.writeConfigFile(obj);
         return host;
+    }
+
+    public removeHostById(id): boolean {
+        let config = this.getConfig();
+        let groups = config.hostGroups;
+        for (let g of groups) {
+            for (let i = 0; i < g.hosts.length; i++) {
+                if (g.hosts[i].id === id) {
+                    removeSync(g.hosts[i].path);
+                    g.hosts.splice(i, 1);
+                    this.writeConfigFile(config);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static getInstance(): HostConfigService {

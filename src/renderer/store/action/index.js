@@ -9,9 +9,15 @@ export default {
         const checkedHostIdList = await clientUtil.perform('modifyCheckedHostIdList', { id });
         commit('modifyCheckedHostIdListAction', checkedHostIdList);
     },
-    async addHostAction({ commit, state }, name) {
+    async addHostAction({ commit }, name) {
         // create file
         const newHost = await clientUtil.perform('addHost', { name });
         commit('addHost', newHost);
+    },
+    async removeHostByIdAction({ commit }, id) {
+        const result = await clientUtil.perform('removeHostById', { id });
+        if (result) {
+            commit('removeHostById', id);
+        }
     }
 };

@@ -49,6 +49,10 @@ class BrowserEventProcessor {
     private addHost({name}): { id: number, name: string, path: string } {
         return HostConfigService.getInstance().addHost(name);
     }
+
+    private removeHostById({id}):boolean{
+        return HostConfigService.getInstance().removeHostById(id);
+    }
 }
 
 

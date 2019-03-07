@@ -2,8 +2,7 @@
     <div class="m-host-content">
         <code-mirror :value="content" class="editor"
                      :options="options"
-                     @input="onCmCodeChange"
-        >
+                     @input="onCmCodeChange">
         </code-mirror>
     </div>
 </template>
