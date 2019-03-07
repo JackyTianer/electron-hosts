@@ -4,8 +4,13 @@
             <h2 class="group-name">{{g.name}}</h2>
             <ul>
                 <li class="host-name" v-for="h in g.hosts" :key="h.id" @click="goHostContent(h.id)">
-                    <i class="el-icon-check"></i>
-                    <span class="name">{{h.name}}</span>
+                    <div v-if="!h.edit">
+                        <el-checkbox :checked="isCheck(h.id)" @change="modifyCheckedHostIdList(h.id)"/>
+                        <span class="name">{{h.name}}</span>
+                    </div>
+                    <div v-else>
+                        <el-input :value="h.name" placeholder="" size="mini"></el-input>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -13,32 +18,22 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex';
+
     export default {
         name: 'HostsSidebar',
         props: {
             hostGroups: {
                 type: Array,
                 default: () => []
+            },
+            checkedHostIdList: {
+                type: Array,
+                default: () => []
             }
         },
-        // data() {
-        //     return {
-        //         crtId: undefined
-        //     };
-        // },
-        // watch: {
-        //     hostGroups: (newV) => {
-        //         if (newV.length > 0) {
-        //             debugger;
-        //             // this.$router.push('host', {
-        //             //     params: {
-        //             //         id: newV[0].hosts[0].id
-        //             //     }
-        //             // });
-        //         }
-        //     }
-        // },
         methods: {
+            ...mapActions(['modifyCheckedHostIdListAction']),
             goHostContent(id) {
                 this.$router.replace({
                     name: 'host',
@@ -46,6 +41,12 @@
                         id
                     }
                 });
+            },
+            isCheck(id) {
+                return this.checkedHostIdList.indexOf(id) !== -1;
+            },
+            modifyCheckedHostIdList(id) {
+                this.modifyCheckedHostIdListAction(id);
             }
         }
     };
@@ -65,8 +66,8 @@
             color: #909399;
             cursor: pointer;
             padding-left: 10px;
-            .name {
-                margin-left: 5px;
+            .el-checkbox {
+                margin-right: 0;
             }
             &:hover {
                 background: #ebeef5;

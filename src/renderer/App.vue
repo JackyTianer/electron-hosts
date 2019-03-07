@@ -2,7 +2,8 @@
     <div id="app" class="m-hosts">
         <hosts-header class="header"></hosts-header>
         <div class="content">
-            <hosts-sidebar class="left-content" :host-groups="hostGroups"></hosts-sidebar>
+            <hosts-sidebar class="left-content" :host-groups="hostGroups"
+                           :checked-host-id-list="checkedHostIdList"></hosts-sidebar>
             <router-view class="right-content" v-if="isSubRouterAlive"></router-view>
         </div>
     </div>
@@ -21,6 +22,7 @@
         },
         computed: {
             ...mapState({
+                checkedHostIdList: (state) => state.checkedHostIdList,
                 hostGroups: (state) => state.hostGroups
             })
         },
@@ -38,9 +40,9 @@
             };
         },
         methods: {
-            ...mapActions(['setHostGroupsAction']),
+            ...mapActions(['getInitDataAction']),
             initData() {
-                this.setHostGroupsAction();
+                this.getInitDataAction();
             },
             refresh() {
                 this.isSubRouterAlive = false;
@@ -62,6 +64,7 @@
             flex-flow: row nowrap;
             height: calc(100vh - 50px);
             .left-content {
+                min-width: 200px;
                 width: 200px;
             }
             .right-content {

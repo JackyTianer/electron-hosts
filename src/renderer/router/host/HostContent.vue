@@ -11,6 +11,7 @@
 <script>
     import clientUtil from '../../common/utils/clientUtil';
     import CodeMirror from '../components/CodeMirror';
+
     // import util from '../../common/utils/util';
 
     export default {
@@ -34,7 +35,7 @@
             content: '',
             options: {
                 lineNumbers: true,
-                mode: 'yaml'
+                mode: 'hosts'
             }
         }),
         mounted() {

@@ -1,7 +1,6 @@
 // require component
+import './cm_hl';
 import { codemirror } from 'vue-codemirror';
-import 'codemirror/mode/yaml/yaml';
-
 // require styles
 import 'codemirror/lib/codemirror.css';
 

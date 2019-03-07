@@ -25,6 +25,11 @@ class BrowserEventProcessor {
         ipcMain.removeAllListeners(this.channel);
     }
 
+    private getConfig() {
+
+        return HostConfigService.getInstance().getConfig();
+    }
+
     private getHostGroups(): Array<{ id: number, name: string, hosts: [any] }> {
         return HostConfigService.getInstance().getHostGroups();
     }
@@ -33,9 +38,18 @@ class BrowserEventProcessor {
         return HostConfigService.getInstance().getHostContentById(id);
     }
 
-    private updateHostContentById({id, content}):boolean {
+    private updateHostContentById({id, content}): boolean {
         return HostConfigService.getInstance().updateHostContentById(id, content);
     }
+
+    private modifyCheckedHostIdList({id}): Array<number> {
+        return HostConfigService.getInstance().modifyCheckedHostIdList(id);
+    }
+
+    private addHost({name}): { id: number, name: string, path: string } {
+        return HostConfigService.getInstance().addHost(name);
+    }
 }
+
 
 export default BrowserEventProcessor;
