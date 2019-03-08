@@ -2,14 +2,14 @@ export default {
     modifyCheckedHostIdListAction(state, idList) {
         state.checkedHostIdList = [...idList];
     },
-    getInitData(state, { hostGroups, checkedHostIdList }) {
-        state.hostGroups = hostGroups;
+    getInitData(state, { hosts, checkedHostIdList }) {
+        state.hosts = hosts;
         state.checkedHostIdList = [...checkedHostIdList];
     },
     addHost(state, host) {
-        state.hostGroups[0].hosts = [...state.hostGroups[0].hosts, host];
+        state.hosts = [...state.hosts, host];
     },
     removeHostById(state, id) {
-        state.hostGroups[0].hosts = state.hostGroups[0].hosts.filter((item) => item.id !== id);
+        state.hosts = state.hosts.filter((item) => item.id !== id);
     }
 };

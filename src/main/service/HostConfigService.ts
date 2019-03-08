@@ -5,22 +5,15 @@ import util from '../utils/util';
 import {readJsonSync, writeJSONSync, readFileSync, writeFileSync, ensureFileSync, removeSync} from 'fs-extra';
 
 const packageConfig = require('../../../package.json');
-const hostDoc = path.join(app.getPath('userData'), 'hostFile/');
+const hostDoc: string = path.join(app.getPath('userData'), 'hostFile/');
+const MACOS_HOST_PATH: string = '/private/etc/hosts';
 
 const initConfig = {
     version: packageConfig.version,
-    hostGroups: [{
+    hosts: [{
         id: util.generateId(),
-        name: '默认组',
-        hosts: [{
-            id: util.generateId(),
-            name: '默认host',
-            path: path.join(hostDoc, 'defaultHost.txt')
-        }, {
-            id: util.generateId(),
-            name: '常驻host',
-            path: path.join(hostDoc, 'residentHost.txt')
-        }]
+        name: 'host备份',
+        path: path.join(hostDoc, 'backup.txt')
     }],
     checkedHostIdList: []
 };
@@ -34,21 +27,19 @@ class HostConfigService extends BaseService {
         super();
         this.configPath = path.join(app.getPath('userData'), 'config.json');
         let obj = this.getConfig();
-        ensureFileSync(initConfig.hostGroups[0].hosts[0].path);
-        ensureFileSync(initConfig.hostGroups[0].hosts[1].path);
         if (obj === null) {
             this.writeConfigFile(initConfig);
-            writeFileSync(initConfig.hostGroups[0].hosts[0].path, readFileSync('/private/etc/hosts', {
+            ensureFileSync(initConfig.hosts[0].path);
+            writeFileSync(initConfig.hosts[0].path, readFileSync(MACOS_HOST_PATH, {
                 encoding: 'utf8'
             }), {
                 flag: 'w+'
             });
-            writeFileSync(initConfig.hostGroups[0].hosts[1].path, '', {
-                flag: 'w+'
-            });
-        } else if (obj.version !== packageConfig.version) {
-            this.writeConfigFile(Object.assign({}, obj, {version: packageConfig.version}));
+            return;
         }
+        // if (obj.version !== packageConfig.version) {
+        //     this.writeConfigFile(Object.assign({}, obj, {version: packageConfig.version}));
+        // }
     }
 
     private writeConfigFile(content) {
@@ -59,20 +50,18 @@ class HostConfigService extends BaseService {
     }
 
     public getConfig() {
-        return readJsonSync(this.configPath);
+        return readJsonSync(this.configPath, {throws: false});
     }
 
-    public getHostGroups(): Array<{ id: number, name: string, hosts: [any] }> {
-        return this.getConfig().hostGroups;
+    public getHosts(): Array<{ id: number, name: string, path: string }> {
+        return this.getConfig().hosts;
     }
 
     public getHostConfigById(id: number): { id: number, name: string, path: string } {
-        const groups = this.getHostGroups();
-        for (let g of groups) {
-            for (let h of g.hosts) {
-                if (h.id === id) {
-                    return h;
-                }
+        const hosts = this.getHosts();
+        for (let h of hosts) {
+            if (h.id === id) {
+                return h;
             }
         }
         return null;
@@ -89,15 +78,28 @@ class HostConfigService extends BaseService {
     }
 
     public updateHostContentById(id: number, content: string): boolean {
-        const config = this.getHostConfigById(id);
-        if (!!config) {
-            writeFileSync(config.path, content, {
+        const config = this.getConfig();
+        const hostConfig = this.getHostConfigById(id);
+        if (!!hostConfig) {
+            writeFileSync(hostConfig.path, content, {
                 encoding: 'utf8',
                 flag: 'w+'
             });
+            (config.checkedHostIdList.indexOf(id) !== -1) && this.updateHostFile();
             return true;
         }
         return false;
+    }
+
+    private updateHostFile() {
+        const {hosts, checkedHostIdList} = this.getConfig();
+        let content = '';
+        for (let h of hosts) {
+            if (checkedHostIdList.indexOf(h.id) !== -1) {
+                content += readFileSync(h.path) + '\n';
+            }
+        }
+        writeFileSync(MACOS_HOST_PATH, content);
     }
 
     public modifyCheckedHostIdList(id: number): Array<number> {
@@ -109,6 +111,8 @@ class HostConfigService extends BaseService {
             obj.checkedHostIdList.push(id);
         }
         this.writeConfigFile(obj);
+        // 更新host文件
+        this.updateHostFile();
         return obj.checkedHostIdList;
     }
 
@@ -121,22 +125,20 @@ class HostConfigService extends BaseService {
             path: path.join(hostDoc, `${id}.txt`),
         };
         ensureFileSync(host.path);
-        obj.hostGroups[0].hosts.push(host);
+        obj.hosts.push(host);
         this.writeConfigFile(obj);
         return host;
     }
 
     public removeHostById(id): boolean {
         let config = this.getConfig();
-        let groups = config.hostGroups;
-        for (let g of groups) {
-            for (let i = 0; i < g.hosts.length; i++) {
-                if (g.hosts[i].id === id) {
-                    removeSync(g.hosts[i].path);
-                    g.hosts.splice(i, 1);
-                    this.writeConfigFile(config);
-                    return true;
-                }
+        let hosts = config.hosts;
+        for (let i = 0; i < hosts.length; i++) {
+            if (hosts[i].id === id) {
+                removeSync(hosts[i].path);
+                hosts.splice(i, 1);
+                this.writeConfigFile(config);
+                return true;
             }
         }
         return false;
@@ -145,6 +147,7 @@ class HostConfigService extends BaseService {
     public static getInstance(): HostConfigService {
         return this.instance;
     }
+
 }
 
 export default HostConfigService;

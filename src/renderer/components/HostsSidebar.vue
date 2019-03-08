@@ -1,15 +1,12 @@
 <template>
     <div class="u-host-sidebar">
-        <div v-for="g in hostGroups" :key="g.id">
-            <h2 class="group-name">{{g.name}}</h2>
-            <ul>
-                <li class="host-name f-cb" v-for="h in g.hosts" :key="h.id" @click="goHostContent(h.id)">
-                    <el-checkbox :checked="isCheck(h.id)" @change="modifyCheckedHostIdList(h.id)"/>
-                    <span class="name">{{h.name}}</span>
-                    <i class="el-icon-delete oper-remove f-fr" @click="removeHost(h.id)"></i>
-                </li>
-            </ul>
-        </div>
+        <ul>
+            <li class="host-name f-cb" v-for="h in hosts" :key="h.id" @click="goHostContent(h.id)">
+                <el-checkbox :checked="isCheck(h.id)" @change="modifyCheckedHostIdList(h.id)"/>
+                <span class="name">{{h.name}}</span>
+                <i class="el-icon-delete oper-remove f-fr" @click="removeHost(h.id)"></i>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -19,7 +16,7 @@
     export default {
         name: 'HostsSidebar',
         props: {
-            hostGroups: {
+            hosts: {
                 type: Array,
                 default: () => []
             },

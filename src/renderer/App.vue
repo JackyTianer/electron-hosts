@@ -2,7 +2,7 @@
     <div id="app" class="m-hosts">
         <hosts-header class="header"></hosts-header>
         <div class="content">
-            <hosts-sidebar class="left-content" :host-groups="hostGroups"
+            <hosts-sidebar class="left-content" :hosts="hosts"
                            :checked-host-id-list="checkedHostIdList"></hosts-sidebar>
             <router-view class="right-content" v-if="isSubRouterAlive"></router-view>
         </div>
@@ -23,7 +23,7 @@
         computed: {
             ...mapState({
                 checkedHostIdList: (state) => state.checkedHostIdList,
-                hostGroups: (state) => state.hostGroups
+                hosts: (state) => state.hosts
             })
         },
         async mounted() {

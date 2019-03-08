@@ -26,12 +26,11 @@ class BrowserEventProcessor {
     }
 
     private getConfig() {
-
         return HostConfigService.getInstance().getConfig();
     }
 
-    private getHostGroups(): Array<{ id: number, name: string, hosts: [any] }> {
-        return HostConfigService.getInstance().getHostGroups();
+    private getHosts(): Array<{ id: number, name: string, path: string }> {
+        return HostConfigService.getInstance().getHosts();
     }
 
     private getHostContentById({id}): string {

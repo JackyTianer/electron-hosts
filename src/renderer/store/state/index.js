@@ -1,4 +1,4 @@
 export default {
-    hostGroups: [],
+    hosts: [],
     checkedHostIdList: []
 };
