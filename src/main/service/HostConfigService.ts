@@ -3,12 +3,14 @@ import {app} from 'electron';
 import * as path from 'path';
 import util from '../utils/util';
 import {readJsonSync, writeJSONSync, readFileSync, writeFileSync, ensureFileSync, removeSync} from 'fs-extra';
+import {Host, HostConfig} from "../electron-hosts";
+
 
 const packageConfig = require('../../../package.json');
 const hostDoc: string = path.join(app.getPath('userData'), 'hostFile/');
 const MACOS_HOST_PATH: string = '/private/etc/hosts';
 
-const initConfig = {
+const initConfig: HostConfig = {
     version: packageConfig.version,
     hosts: [{
         id: util.generateId(),
@@ -53,11 +55,11 @@ class HostConfigService extends BaseService {
         return readJsonSync(this.configPath, {throws: false});
     }
 
-    public getHosts(): Array<{ id: number, name: string, path: string }> {
+    public getHosts(): Array<Host> {
         return this.getConfig().hosts;
     }
 
-    public getHostConfigById(id: number): { id: number, name: string, path: string } {
+    public getHostConfigById(id: number): Host {
         const hosts = this.getHosts();
         for (let h of hosts) {
             if (h.id === id) {
@@ -116,7 +118,7 @@ class HostConfigService extends BaseService {
         return obj.checkedHostIdList;
     }
 
-    public addHost(name): { id: number, name: string, path: string } {
+    public addHost(name): Host {
         let obj = this.getConfig();
         const id = util.generateId();
         const host = {

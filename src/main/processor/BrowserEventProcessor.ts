@@ -1,5 +1,6 @@
 import {ipcMain} from 'electron';
 import HostConfigService from '../service/HostConfigService';
+import {Host} from "../electron-hosts";
 
 
 class BrowserEventProcessor {
@@ -29,7 +30,7 @@ class BrowserEventProcessor {
         return HostConfigService.getInstance().getConfig();
     }
 
-    private getHosts(): Array<{ id: number, name: string, path: string }> {
+    private getHosts(): Array<Host> {
         return HostConfigService.getInstance().getHosts();
     }
 
@@ -45,11 +46,11 @@ class BrowserEventProcessor {
         return HostConfigService.getInstance().modifyCheckedHostIdList(id);
     }
 
-    private addHost({name}): { id: number, name: string, path: string } {
+    private addHost({name}): Host {
         return HostConfigService.getInstance().addHost(name);
     }
 
-    private removeHostById({id}):boolean{
+    private removeHostById({id}): boolean {
         return HostConfigService.getInstance().removeHostById(id);
     }
 }
