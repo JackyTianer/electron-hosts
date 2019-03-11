@@ -11,6 +11,4 @@ export declare interface HostConfig {
     checkedHostIdList: Array<number>
 }
 
-export declare class BrowserEventProcessor{}
-
 

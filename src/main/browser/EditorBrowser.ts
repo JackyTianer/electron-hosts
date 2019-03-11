@@ -1,8 +1,8 @@
 import BaseBrowser from './abstract/BaseBrowser';
 
 const browserBaseConfig = {
-    width: 480,
-    height: 350,
+    width: 960,
+    height: 550,
     resizable: true,
     center: true,
     show: true,

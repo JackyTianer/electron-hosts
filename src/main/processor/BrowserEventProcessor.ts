@@ -53,6 +53,10 @@ class BrowserEventProcessor {
     private removeHostById({id}): boolean {
         return HostConfigService.getInstance().removeHostById(id);
     }
+
+    private updateHostName({id, name}): boolean {
+        return HostConfigService.getInstance().updateHostName(id, name);
+    }
 }
 
 

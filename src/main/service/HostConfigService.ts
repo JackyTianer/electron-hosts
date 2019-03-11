@@ -146,6 +146,19 @@ class HostConfigService extends BaseService {
         return false;
     }
 
+    public updateHostName(id, name): boolean {
+        let config = this.getConfig();
+        let hosts = config.hosts;
+        for (let i = 0; i < hosts.length; i++) {
+            if (hosts[i].id === id) {
+                hosts[i].name = name;
+                this.writeConfigFile(config);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static getInstance(): HostConfigService {
         return this.instance;
     }

@@ -1,5 +1,5 @@
 export default {
-    modifyCheckedHostIdListAction(state, idList) {
+    modifyCheckedHostIdList(state, idList) {
         state.checkedHostIdList = [...idList];
     },
     getInitData(state, { hosts, checkedHostIdList }) {
@@ -11,5 +11,12 @@ export default {
     },
     removeHostById(state, id) {
         state.hosts = state.hosts.filter((item) => item.id !== id);
+    },
+    updateHostName(state, { id, name }) {
+        state.hosts.forEach((item) => {
+            if (item.id === id) {
+                item.name = name;
+            }
+        });
     }
 };
