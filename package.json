@@ -24,7 +24,7 @@
     },
     "build": {
         "productName": "electron-hosts",
-        "appId": "com.example.yourapp",
+        "appId": "com.example.electron-hosts",
         "directories": {
             "output": "build"
         },
